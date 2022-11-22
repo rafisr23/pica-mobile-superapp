@@ -18,7 +18,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate("Home");
+        navigation.navigate("Bottom");
       }
     });
 
@@ -45,12 +45,13 @@ const LoginScreen = () => {
     // Alert.alert("Information", "Login");
     // alert("Login");
     setLoading(true);
-    setTimeout(async () => {
+    setTimeout(() => {
       setLoading(false);
       auth
         .signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
+          // navigation.navigate("AppStack");
           console.log(user.email);
         })
         .catch((error) => {

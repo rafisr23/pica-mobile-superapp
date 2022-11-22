@@ -3,6 +3,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
+import BottomStack from "./BottomStack";
 
 // import screen
 import LoginScreen from "../screens/LoginScreen";
@@ -16,7 +17,8 @@ const NavStack = () => {
       <StatusBar style="light" />
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-        <Stack.Screen options={{ headerBackVisible: false, title: "Dashboard", headerTitleAlign: "center" }} name="Home" component={HomeScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Bottom" component={BottomStack} />
+        {/* <Stack.Screen options={{ headerBackVisible: false, title: "Dashboard", headerTitleAlign: "center" }} name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

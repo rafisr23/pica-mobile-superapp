@@ -1,14 +1,8 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Button from "../components/Button";
-import { auth } from "../firebase";
-// import HomeStack from "../navigation/HomeStack";
 
-const HomeScreen = ({ navigation }) => {
-  // const auth = {
-  //   email: auth.currentUser?.email,
-  // };
-
+const ProfileScreen = () => {
   const handleSignOut = () => {
     auth
       .signOut()
@@ -22,33 +16,23 @@ const HomeScreen = ({ navigation }) => {
       });
   };
 
-  const handlePhone = () => {
-    navigation.navigate("PhoneStack");
-  };
-
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="height">
-      <View>
-        <Text style={styles.text}>Home Screen</Text>
-        <Text style={styles.text}>{auth.currentUser?.email}</Text>
-        <Button title="Phone" onPress={handlePhone} />
-      </View>
-      {/* <View style={styles.buttonContainer}>
+    <KeyboardAvoidingView style={styles.container}>
+      <Text>Hello</Text>
+      <View style={styles.buttonContainer}>
         <Button title="Sign out" mb={8} onPress={handleSignOut} />
-      </View> */}
-      {/* <HomeStack /> */}
+      </View>
     </KeyboardAvoidingView>
   );
 };
 
-export default HomeScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // paddingHorizontal: 40,
   },
 
   buttonContainer: {

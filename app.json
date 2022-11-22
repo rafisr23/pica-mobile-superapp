@@ -1,22 +1,20 @@
 {
   "expo": {
-    "name": "final-project-expo",
-    "slug": "final-project-expo",
+    "name": "Pica Super APP",
+    "slug": "pica-super-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-pica.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash-pica.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#2D4263"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
