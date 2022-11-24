@@ -1,8 +1,9 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Button from "../components/Button";
+import { auth } from "../firebase";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const handleSignOut = () => {
     auth
       .signOut()

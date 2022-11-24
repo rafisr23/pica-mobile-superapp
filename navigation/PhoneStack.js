@@ -11,7 +11,7 @@ const PhoneStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen options={{ headerBackVisible: true, title: "Phone Book", headerTitleAlign: "center" }} name="ListPhone" component={ListPhone} />
-      <Stack.Screen options={{ headerShown: false }} name="InputPhone" component={InputPhone} />
+      <Stack.Screen options={{ headerBackVisible: true, title: "Input", headerTitleAlign: "center" }} name="InputPhone" component={InputPhone} />
       <Stack.Screen options={{ headerShown: false }} name="EditPhone" component={EditPhone} />
     </Stack.Navigator>
   );
