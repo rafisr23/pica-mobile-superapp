@@ -2,27 +2,40 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 
-const CustomRowView = ({ title, description, image_url }) => {
+const CustomRowView = ({ name, phoneNumber, id }) => {
   const navigation = useNavigation();
-  const [name, setTitle] = useState({ title });
 
   const sendData = () => {
-    navigation.navigate("EditPhone", { title: title });
+    navigation.navigate("EditPhone", { name: name, phoneNumber: phoneNumber, id: id });
   };
+
+  // const [items, setItems] = useState(null);
+
+  // useEffect(() => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(`select * from items where done = ?;`, [doneHeading ? 1 : 0], (_, { rows: { _array } }) => setItems(_array));
+  //   });
+  // }, []);
+
+  // const heading = doneHeading ? "Completed" : "Todo";
+
+  // if (items === null || items.length === 0) {
+  //   return null;
+  // }
 
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log(`hello ${title}`);
+        // console.log(`hello ${name}`);
         // navigation.navigate("EditPhone", { title: title });
         sendData();
       }}
     >
       <View style={styles.container}>
-        <Image source={{ uri: image_url }} style={styles.photo} />
+        <Image source={require("../assets/img/user.png")} style={styles.photo} />
         <View style={styles.container_text}>
-          <Text style={styles.title}>{title}</Text>
-          {/* <Text style={styles.description}>{description}</Text> */}
+          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.phoneNumber}>{phoneNumber}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -40,18 +53,27 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginTop: 8,
     marginBottom: 8,
-    // borderRadius: 10,
+    borderRadius: 10,
     backgroundColor: "#FFF",
     // borderColor: "#FFF",
     borderBottomColor: "#000",
-    borderBottomWidth: 2,
-    elevation: 2,
+    // borderBottomWidth: 1,
+    // elevation: 2,
     // width: "90%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   title: {
     fontSize: 20,
     color: "#000",
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   container_text: {
     flex: 1,
@@ -59,9 +81,10 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     justifyContent: "center",
   },
-  description: {
+  phoneNumber: {
     fontSize: 16,
-    fontStyle: "italic",
+    // fontStyle: "italic",
+    color: "grey",
   },
   photo: {
     justifyContent: "center",

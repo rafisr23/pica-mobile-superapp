@@ -1,33 +1,62 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect } from "react";
 import { FloatingAction } from "react-native-floating-action";
 import CustomListView from "../../components/CustomListView";
+import Constants from "expo-constants";
+import * as SQLite from "expo-sqlite";
+import { useFocusEffect } from "@react-navigation/native";
+
+function openDatabase() {
+  if (Platform.OS === "web") {
+    return {
+      transaction: () => {
+        return {
+          executeSql: () => {},
+        };
+      },
+    };
+  }
+
+  const db = SQLite.openDatabase("db_phoneBook.db");
+  return db;
+}
+
+const db = openDatabase();
 
 const ListPhone = ({ navigation }) => {
-  const getList = () => {
-    return [
-      {
-        id: 1,
-        title: "Rafi",
-        image_url: "https://cdn-icons-png.flaticon.com/512/481/481078.png",
-      },
-      {
-        id: 2,
-        title: "Udin",
-        image_url: "https://cdn-icons-png.flaticon.com/512/481/481078.png",
-      },
-      {
-        id: 3,
-        title: "Yoyo",
-        image_url: "https://cdn-icons-png.flaticon.com/512/481/481078.png",
-      },
-    ];
+  const [items, setItems] = useState(null);
+  const sendData = () => {
+    navigation.navigate("EditPhone", { name: name, phoneNumber: phoneNumber });
   };
+
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql("create table if not exists tb_contact (id integer primary key not null, name text, phoneNumber text);");
+    });
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      db.transaction((tx) => {
+        tx.executeSql(`select * from tb_contact;`, [], (_, { rows: { _array } }) => setItems(_array));
+      });
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(`select * from tb_contact;`, [], (_, { rows: { _array } }) => setItems(_array));
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(items);
+  // }, [items]);
 
   const actions = [
     {
       text: "Add Data",
-      // icon: require("./images/ic_accessibility_white.png"),
+      icon: require("../../assets/icon/plus-white.png"),
       name: "bt_add",
       position: 1,
     },
@@ -35,7 +64,34 @@ const ListPhone = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
-      <CustomListView itemList={getList()} />
+      {/* <CustomListView itemList={getList()} /> */}
+      {items ? (
+        <CustomListView itemList={items} />
+      ) : (
+        // <View>
+        //   <Text style={styles.sectionHeading}>Contact List</Text>
+        //   {items.map(({ id, name, phoneNumber }) => (
+        //     <TouchableOpacity
+        //       onPress={() => {
+        //         // console.log(`hello ${name}`);
+        //         // navigation.navigate("EditPhone", { title: title });
+        //         sendData();
+        //       }}
+        //     >
+        //       <View style={styles.listcontainer}>
+        //         <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/64/64572.png" }} style={styles.photo} />
+        //         <View style={styles.container_text}>
+        //           <Text style={styles.title}>{name}</Text>
+        //           <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+        //         </View>
+        //       </View>
+        //     </TouchableOpacity>
+        //   ))}
+        // </View>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionHeading}>No Contact</Text>
+        </View>
+      )}
       <FloatingAction
         // onOpen={() => {
         //   navigation.navigate("InputPhone");
@@ -47,6 +103,9 @@ const ListPhone = ({ navigation }) => {
         onPressItem={() => {
           navigation.navigate("InputPhone");
         }}
+        iconHeight={20}
+        iconWidth={20}
+        // color="#fff"
       />
     </KeyboardAvoidingView>
   );
@@ -58,8 +117,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  listContainer: {
-    width: "100%",
+    // paddingVertical: 20,
+    // paddingHorizontal: 5,
   },
 });

@@ -7,7 +7,7 @@ const CustomListView = ({ itemList }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={itemList} renderItem={({ item }) => <CustomRowView title={item.title} description={item.description} image_url={item.image_url} />} keyExtractor={(item) => item.id} extraData={selectedId} />
+      <FlatList data={itemList} renderItem={({ item }) => <CustomRowView name={item.name} phoneNumber={item.phoneNumber} id={item.id} />} keyExtractor={(item) => item.id} extraData={selectedId} />
     </View>
   );
 };

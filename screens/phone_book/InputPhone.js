@@ -1,13 +1,59 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../components/Button";
+import Constants from "expo-constants";
+import * as SQLite from "expo-sqlite";
 
-const InputPhone = () => {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+function openDatabase() {
+  if (Platform.OS === "web") {
+    return {
+      transaction: () => {
+        return {
+          executeSql: () => {},
+        };
+      },
+    };
+  }
 
-  const handleSave = () => {
-    Alert.alert("Information", `Nama : ${name} \nNo. Telp : ${phoneNumber}`);
+  const db = SQLite.openDatabase("db_phoneBook.db");
+  return db;
+}
+
+const db = openDatabase();
+
+const InputPhone = ({ navigation }) => {
+  const [name, setName] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  // const [forceUpdate, forceUpdateId] = useForceUpdate();
+
+  // function useForceUpdate() {
+  //   const [value, setValue] = useState(0);
+  //   return [() => setValue(value + 1), value];
+  //   const [value2, setValue2] = useState(0);
+  //   return [() => setValue(value2 + 1), value2];
+  // }
+
+  const handleSave = (name, phoneNumber) => {
+    // Alert.alert("Information", `Nama : ${name} \nNo. Telp : ${phoneNumber}`);
+    // is text empty?
+    if (name === null || name === "") {
+      // return false;
+      Alert.alert("Information", "The fill must be filled");
+    }
+    if (phoneNumber === null || phoneNumber === "") {
+      Alert.alert("Information", "The fill must be filled");
+      // return false;
+    }
+
+    db.transaction((tx) => {
+      tx.executeSql("insert into tb_contact (name, phoneNumber) values (?, ?)", [name, phoneNumber]);
+      tx.executeSql("select * from tb_contact", [], (_, { rows }) => console.log(JSON.stringify(rows)));
+    }, null);
+
+    setName("");
+    setPhoneNumber("");
+
+    navigation.navigate("PhoneStack", { screen: "ListPhone" });
   };
 
   return (
@@ -20,7 +66,7 @@ const InputPhone = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button title="Save" onPress={handleSave} />
+        <Button title="Save" onPress={() => handleSave(name, phoneNumber)} />
       </View>
     </KeyboardAvoidingView>
   );
